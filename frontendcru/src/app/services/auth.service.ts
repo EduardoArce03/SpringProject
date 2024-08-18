@@ -8,6 +8,11 @@ import { AuthResponse } from '../models/authResponse';
   providedIn: 'root'
 })
 export class AuthService {
+  static getToken() {
+    throw new Error('Method not implemented.');
+  }
+
+  
 
   private apiUrl = 'http://localhost:8080/auth';
 

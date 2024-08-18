@@ -35,6 +35,9 @@ public class Book {
     @NotNull(message = "Price cannot be null")
     private Double price;
 
+    @NotNull(message = "Stock cannot be null")
+    private Integer stock;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "image_id" , referencedColumnName = "id")
     private Image image;

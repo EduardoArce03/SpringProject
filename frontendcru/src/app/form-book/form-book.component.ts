@@ -34,6 +34,7 @@ export class FormBookComponent {
       author: ['', Validators.required],
       pages: [1, [Validators.required, Validators.min(1)]],
       price: [0, [Validators.required, Validators.min(0)]],
+      stock: [0, [Validators.required, Validators.min(1)]],
       image: [null]
     });
   }
@@ -127,7 +128,8 @@ export class FormBookComponent {
         this.isSaveInProgress = false;
         this.router.navigateByUrl('/');
       },
-      error: () => {
+      error: (error) => {
+        console.log('Error', error);
         this.isSaveInProgress = false;
         this.messageService.add({
           severity: 'error',

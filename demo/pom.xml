@@ -91,6 +91,13 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- DEPENDENCIE OF SPRING MAIL -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<version>3.1.5</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

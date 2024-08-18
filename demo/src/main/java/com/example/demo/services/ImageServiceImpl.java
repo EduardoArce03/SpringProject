@@ -23,7 +23,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public Image uploadImage(MultipartFile file) throws IOException {
         // TODO Auto-generated method stub
-        Map<String, Object> result = cloudinaryService.upload(file);
+        Map result = cloudinaryService.upload(file);
         String imageUrl = (String) result.get("url");
         String imageId = (String) result.get("public_id");
         Image image = new Image(file.getOriginalFilename(), imageUrl, imageId);

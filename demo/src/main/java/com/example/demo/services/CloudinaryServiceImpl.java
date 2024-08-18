@@ -36,10 +36,10 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     }
 
     @Override
-    public Map<String, Object> upload(MultipartFile multipartFile) throws IOException {
+    public Map upload(MultipartFile multipartFile) throws IOException {
         // TODO Auto-generated method stub
         File convFile = convert(multipartFile);
-        Map result = (Map) cloudinary.uploader().upload(convFile, ObjectUtils.emptyMap());
+        Map result = cloudinary.uploader().upload(convFile, ObjectUtils.emptyMap());
         if (!Files.deleteIfExists(convFile.toPath())){
             throw new IOException("No se pudo eliminar el archivo temporal" + convFile.getAbsolutePath());
         }
@@ -47,8 +47,8 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     }
     
     @Override
-    public Map<String, Object> delete(String id) throws IOException {
+    public Map delete(String id) throws IOException {
         // TODO Auto-generated method stub
-        return (Map) cloudinary.uploader().destroy(id, ObjectUtils.emptyMap());
+        return cloudinary.uploader().destroy(id, ObjectUtils.emptyMap());
     }
 }

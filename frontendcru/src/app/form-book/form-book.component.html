@@ -20,6 +20,10 @@
                 <label for="lastname1">Precio</label>
                 <p-inputNumber inputId="integeronly" formControlName="price" />
             </div>
+            <div class="field flex flex-column gap-1">
+                <label for="stock1">Stock</label>
+                <p-inputNumber inputId="integeronly" formControlName="stock" />
+            </div>
             <p-fileUpload mode="basic" [chooseLabel]="edit?'Cambiar imagen':'Seleccionar imagen'"
                 chooseIcon="pi pi-upload" name="demo[]" [customUpload]="true" accept="image/*" maxFileSize="1000000"
                 (onSelect)="edit?changeImage($event):onFileSelected($event)" />

@@ -7,5 +7,6 @@ export interface Book {
     author: string;
     pages: number;
     price: number;
+    book: number;
     image?: BookImage;
 }

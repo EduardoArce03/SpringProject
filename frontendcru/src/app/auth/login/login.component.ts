@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { Router } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Component({
@@ -39,6 +40,17 @@ export class LoginComponent {
         this.messageService.add({severity: 'error', summary: 'Error', detail: 'Usuario o contraseña incorrectos'});
       }
     });
+  }
+
+  logout() {
+    try {
+      this.authService.logout();
+      this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Sesión cerrada correctamente' });
+      this.router.navigate(['']);
+    } catch (error) {
+      console.error('Error durante el cierre de sesión', error);
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Hubo un problema al cerrar la sesión' });
+    }
   }
 
 
