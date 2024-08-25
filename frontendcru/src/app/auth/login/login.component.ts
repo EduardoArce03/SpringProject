@@ -4,7 +4,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models/loginRequest';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject } from 'rxjs';
@@ -13,7 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [PasswordModule, CheckboxModule, FormsModule, ReactiveFormsModule, ToastModule],
+  imports: [PasswordModule, CheckboxModule, FormsModule, ReactiveFormsModule, ToastModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -29,7 +29,8 @@ export class LoginComponent {
   login(user: LoginRequest) {
     this.authService.login(user).subscribe({
       next: (data) => {
-        localStorage.setItem('token', data.token); // Guarda el token
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', data.userId.toString());
         console.log('Logeado', data.token);
         this.authService.saveToken(data.token);
         this.router.navigate(['']);

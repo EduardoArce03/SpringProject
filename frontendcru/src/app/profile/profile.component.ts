@@ -29,7 +29,7 @@ export class ProfileComponent {
   }
 
   getUser(){
-    this.userService.getUser(4).subscribe({
+    this.userService.getUser(1).subscribe({
       next: (data) => {
         this.user = data;
       },

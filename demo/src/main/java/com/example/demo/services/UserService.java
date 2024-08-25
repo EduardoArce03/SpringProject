@@ -14,5 +14,7 @@ public interface UserService {
     //Obtener lista de usuarios
     Iterable<Users> getUsers();
     //Login
+
+    void updatePassword(String password, String email);
     
 }

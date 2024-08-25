@@ -32,7 +32,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(authRequest ->
               authRequest
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/forgot/**").permitAll()
                 .requestMatchers("/book").permitAll()
+                .requestMatchers("/user/**").permitAll()
                 .anyRequest().authenticated()
                 )
             .sessionManagement(sessionManager->

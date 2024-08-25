@@ -21,7 +21,7 @@ import { BadgeModule } from 'primeng/badge';
 })
 export class TopbarComponent {
 
-  user : User = {
+  user: User = {
     id: 0,
     name: '',
     email: '',
@@ -32,11 +32,12 @@ export class TopbarComponent {
     address: '',
     role: ''
   }
-items: MenuItem[]|undefined;
-avatar: any;
+  items: MenuItem[] | undefined;
+  avatar: any;
+  userId = parseInt(localStorage.getItem('user') || '0');
 
 
-  constructor(private userService: UsersService, public authService: AuthService, private router:Router) { }
+  constructor(private userService: UsersService, public authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.getUser();
@@ -49,8 +50,8 @@ avatar: any;
     this.isLogged();
   }
 
-  getUser(){
-    this.userService.getUser(4).subscribe({
+  getUser() {
+    this.userService.getUser(this.userId).subscribe({
       next: (data) => {
         console.log('User', data);
         this.user = data;
@@ -68,7 +69,7 @@ avatar: any;
     this.router.navigate(['/login']);
   }
 
-  isLogged(){
+  isLogged() {
     return this.authService.isLoggedIn();
   }
 

@@ -1,7 +1,7 @@
 package com.example.demo.services;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.demo.controller.AuthResponse;
@@ -28,10 +28,11 @@ public class AuthService {
     public AuthResponse login(LoginRequest loginRequest) {
         // TODO Auto-generated method stub
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        UserDetails user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow();
+        Users user = userRepository.findByUsername(loginRequest.getUsername()).orElseThrow();
         String token = jwtService.getToken(user);
         return AuthResponse.builder()
             .token(token)
+            .userId(user.getId())
             .build();
     }
 

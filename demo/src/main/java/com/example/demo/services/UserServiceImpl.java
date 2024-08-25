@@ -44,5 +44,11 @@ public class UserServiceImpl implements UserService{
         return userRepository.findAll();
     }
 
+    @Override
+    public void updatePassword(String password, String email) {
+        // TODO Auto-generated method stub
+        userRepository.updatePassword(password, email);
+    }
+
     
 }

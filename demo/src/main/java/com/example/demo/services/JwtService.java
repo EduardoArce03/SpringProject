@@ -75,4 +75,17 @@ public class JwtService {
         return getExpirationDateFromToken(token).before(new Date());
     }
 
+    public String generateTemporaryToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        // Puedes agregar claims adicionales si lo necesitas
+        return Jwts.builder()
+            .setClaims(claims)
+            .setSubject(userDetails.getUsername())
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // Token válido por 15 minutos
+            .signWith(getKey(), SignatureAlgorithm.HS256)
+            .compact();
+    }
+    
+
 }
