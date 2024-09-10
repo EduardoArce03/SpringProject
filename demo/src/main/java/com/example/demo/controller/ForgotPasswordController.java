@@ -17,10 +17,10 @@ import com.example.demo.dto.MailBody;
 import com.example.demo.model.ForgotPassword;
 import com.example.demo.model.Users;
 import com.example.demo.repositories.UserRepository;
+import com.example.demo.request.ChangePasswordRequest;
+import com.example.demo.request.VerifyOtpRequest;
 import com.example.demo.services.EmailService;
 import com.example.demo.services.ForgotServiceImpl;
-
-import utils.ChangePassword;
 
 @RestController
 @RequestMapping("/forgot")
@@ -62,10 +62,10 @@ public class ForgotPasswordController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping("/verifyOtp/{otp}/{email}")
-    public ResponseEntity<ForgotPassword> verifyOtp (@PathVariable Integer otp, @PathVariable String email){
-        Users user = userRepository.findByEmail(email);
-        ForgotPassword forgotPassword = forgotService.findByOtpAndUserEmail(otp, user.getEmail()).orElseThrow(() -> new RuntimeException("Invalid OTP"));
+    @PostMapping("/verifyOtp")
+    public ResponseEntity<ForgotPassword> verifyOtp (@RequestBody VerifyOtpRequest verifyOtpRequest){
+        Users user = userRepository.findByEmail(verifyOtpRequest.getEmail());
+        ForgotPassword forgotPassword = forgotService.findByOtpAndUserEmail(verifyOtpRequest.getOtp(), user.getEmail()).orElseThrow(() -> new RuntimeException("Invalid OTP"));
         if (forgotPassword.getExpiryDate().before(Date.from(Instant.now()))) {
             forgotService.delete(forgotPassword);
             return new ResponseEntity<ForgotPassword>(forgotPassword, HttpStatus.EXPECTATION_FAILED);
@@ -73,13 +73,13 @@ public class ForgotPasswordController {
         return new ResponseEntity<>(forgotPassword, HttpStatus.OK);
     }
 
-    @PostMapping("/resetPassword/{email}")
-    public ResponseEntity<String> resetPassword (@RequestBody ChangePassword changePassword, @PathVariable String email){
-        if (!Objects.equals(changePassword.password(), changePassword.repeatPassword())) {
+    @PostMapping("/resetPassword")
+    public ResponseEntity<String> resetPassword (@RequestBody ChangePasswordRequest changePassword){
+        if (!Objects.equals(changePassword.getPassword(), changePassword.getConfirmPassword())) {
             return new ResponseEntity<>("Passwords do not match", HttpStatus.BAD_REQUEST);
         }
-        String password = passwordEncoder.encode(changePassword.password());
-        userRepository.updatePassword(password, email);
+        String password = passwordEncoder.encode(changePassword.getPassword());
+        userRepository.updatePassword(password, changePassword.getEmail());
         return new ResponseEntity<>("Password updated successfully", HttpStatus.OK);
 
     }

@@ -9,4 +9,5 @@ export interface Book {
     price: number;
     book: number;
     image?: BookImage;
+    selectedCategories?: number[];
 }

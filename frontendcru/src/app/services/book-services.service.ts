@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Book } from '../models/book';
+import { Category } from '../models/Category';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ import { Book } from '../models/book';
 export class BookServicesService {
 
   private apiUrl = 'http://localhost:8080/book';
+  private saveUrl = 'http://localhost:8080/book/save';
 
   constructor(private http : HttpClient) { }
 
@@ -25,7 +27,7 @@ export class BookServicesService {
     formData.append('book', new Blob([JSON.stringify(book)], { type: 'application/json' }));
     formData.append('image', image);
     
-    return this.http.post<Book>(this.apiUrl, book);
+    return this.http.post<Book>(this.saveUrl , book);
   }
 
   deleteBook(id: number): Observable<Book>{
@@ -40,5 +42,9 @@ export class BookServicesService {
     const formData = new FormData();
     formData.append('file', image);
     return this.http.put<Book>(`${this.apiUrl}/${id}/image`, formData);
+  }
+
+  getCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}/categories`);
   }
 }

@@ -18,12 +18,14 @@ export class ForgotpasswordService {
     return this.http.post<User>(`${this.baseUrl}/verifyEmail/${email}`, {});
   }
 
-  verifyCode(code: number, email:string): Observable<ForgotPassword> {
-    return this.http.post<ForgotPassword>(`${this.baseUrl}/verifyOtp/${code}/${email}`, {});
+  verifyCode(code: number, email: string): Observable<ForgotPassword> {
+    // Enviar OTP y email en el cuerpo de la solicitud
+    return this.http.post<ForgotPassword>(`${this.baseUrl}/verifyOtp`, { otp: code, email });
   }
 
   createPassword(email: string, changePassword: ChangePassword): Observable<string> {
-    return this.http.post<string>(`${this.baseUrl}/resetPassword/${email}`, changePassword, {
+    // Enviar el email junto con la nueva contraseña en el cuerpo de la solicitud
+    return this.http.post<string>(`${this.baseUrl}/resetPassword`, { email, ...changePassword }, {
       responseType: 'text' as 'json'
     });
   }

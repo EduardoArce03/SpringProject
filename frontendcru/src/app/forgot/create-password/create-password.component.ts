@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ForgotpasswordService } from '../../services/forgotpassword.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChangePassword } from '../../models/ChangePassword';
 import { ToastModule } from 'primeng/toast';
@@ -17,19 +17,15 @@ import { MessageService } from 'primeng/api';
 })
 export class CreatePasswordComponent {
 
-  email: string = '';
+  email: string = localStorage.getItem('email') || '';
   passwordForm!: FormGroup;
 
-  constructor(private forgotService : ForgotpasswordService, private route : ActivatedRoute, private fb : FormBuilder, private messageService : MessageService ) { }
+  constructor(private forgotService : ForgotpasswordService, private route : ActivatedRoute, private fb : FormBuilder, private messageService : MessageService, private router: Router ) { }
 
   ngOnInit() {  
-    this.route.params.subscribe(params => {
-      this.email = params['email'];
-    });
-
     this.passwordForm = this.fb.group({
       password: ['', Validators.required],
-      repeatPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required]
     });
   }
 
@@ -41,6 +37,8 @@ export class CreatePasswordComponent {
         next: (data) => {
           console.log('Data', data);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Contraseña cambiada' });
+          localStorage.removeItem('email');
+          this.router.navigate(['/login']);
         },
         error: (error) => {
           console.log('Error', error);

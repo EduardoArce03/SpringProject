@@ -20,7 +20,7 @@ public class ForgotServiceImpl implements ForgotService{
     public Integer generateOtp() {
         // TODO Auto-generated method stub
         Random random = new Random();
-        return random.nextInt(1_000, 9_999);
+        return random.nextInt(100_000, 999_999);
     }
 
     @Override

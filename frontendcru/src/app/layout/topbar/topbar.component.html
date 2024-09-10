@@ -1,43 +1,61 @@
-<p-toolbar styleClass="bg-gray-900 shadow-2"
-    [style]="{ 'border-radius': '0rem', 'width': '100%' ,'background-image': 'linear-gradient(to right, var(--bluegray-500), var(--bluegray-800))' }">
+<p-toolbar styleClass="bg-white-100 shadow-2"
+    [style]="{ 'border-radius': '0rem', 'width': '100%' ,'background-image': 'linear-gradient(to right, var(--white-100), var(--white-100))' }">
     <ng-template pTemplate="start">
-        <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" />
+        <img src="/assets/logo-inicio.png" class="w-12 h-auto p-button bg-transparent text-black border-round p-3 hover:bg-gray-200 border-none shadow-none outline-none" routerLink="/home"/>
     </ng-template>
     <ng-template pTemplate="center">
         <div class="flex flex-wrap align-items-center gap-3">
+        </div>
+    </ng-template>
+    <ng-template pTemplate="end">
+        <div class="flex align-items-center gap-5 mr-8">
             <button
-                class="p-link inline-flex justify-content-center align-items-center text-white h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+                class="p-link inline-flex justify-content-center align-items-center text-black h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200" (click)="menu.toggle($event)">
+                <i class="pi pi-user text-2xl" routerLink="profile"></i>
+            </button>
+            @if (isLogged()) {
+                <span class="font-bold text-black">
+                    {{ user.username }}
+                </span>
+            }@else {
+                <a routerLink="login" class="text-black">Iniciar sesión</a>
+            }
+            <button
+                class="p-link inline-flex justify-content-center align-items-center text-black h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
                 <i class="pi pi-home text-2xl" routerLink="home"></i>
             </button>
             <button
-                class="p-link inline-flex justify-content-center align-items-center text-white h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
-                <i class="pi pi-user text-2xl" routerLink="profile"></i>
-            </button>
-            <button
-                class="p-link inline-flex justify-content-center align-items-center text-white h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
-                <i class="pi pi-search text-2xl" ></i>
-            </button>
-            <button
-                class="p-link inline-flex justify-content-flex-end align-items-center text-white h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
+                class="p-link inline-flex justify-content-flex-end align-items-center text-black h-3rem w-3rem border-circle hover:bg-white-alpha-10 transition-all transition-duration-200">
                 <i class="pi pi-shopping-cart text-2xl" pBadge value="2" ></i>
             </button>
         </div>
     </ng-template>
-    <ng-template pTemplate="end">
-        <div class="flex align-items-center gap-3">
-            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle"
-                (click)="menu.toggle($event)"></p-avatar>
-            @if (isLogged()) {
-                <span class="font-bold text-bluegray-50">
-                    {{ user.username }}
-                </span>
-            }@else {
-                <a routerLink="login" class="p-button p-button-text text-white">Iniciar sesion</a>
-            }
-            
-        </div>
-    </ng-template>
     
-
 </p-toolbar>
+<!-- Línea horizontal que cruza todas las categorías -->
+
+<div class="flex justify-content-center">
+    <div class="border-dashed md:border-solid border-black-alpha-90 w-27rem"></div>
+</div>
+
+<div class="flex flex-wrap align-items-center justify-content-center">
+    <div class="surface-overlay w-27rem p-1 m-1 flex align-items-center justify-content-center">
+        <div class="flex">
+            <div class="category-wrapper">
+                <a routerLink="category1" class="category-link">Novedades</a>
+            </div>
+            <div class="category-wrapper">
+                <a routerLink="category2" class="category-link">Jovenes</a>
+            </div>
+            <div class="category-wrapper">
+                <a routerLink="category3" class="category-link">Infantil</a>
+            </div>
+            <div class="category-wrapper">
+                <a routerLink="category4" class="category-link">Empresarial</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <p-menu #menu [model]="items" [popup]="true" styleClass="w-full md:w-15rem"/>

@@ -23,14 +23,14 @@ autoplayInterval="3000">
     <p-tabMenu [model]="items" [activeItem]="items[0]"></p-tabMenu>
 </div>
 <div class="flex align-items-center justify-content-center">
-    <div pAnimateOnScroll enterClass="fadein" leaveClass="fadeout" class="w-9 md:w-30rem align-items-center justify-content-center font-bold border-round m-2" >
+    <div pAnimateOnScroll enterClass="fadein" leaveClass="fadeout" class="w-full md:w-6 justify-content-center font-bold border-round m-2" >
         <p-carousel [value]="books" [numVisible]="3" [numScroll]="3" [responsiveOptions]="responsiveOptions">
             <ng-template let-book pTemplate="item">
                 <div class="border-1 surface-border border-round m-2 p-3 carousel-item">
                     <div class="mb-3">
                         <div class="relative mx-auto">
                             <img src="{{book.image?book.image.imageUrl:'/assets/defecto.png'}}" [alt]="book.name"
-                                class="w-full border-round" />
+                                class="w-7 md:w-max block mx-auto" />
                             <p-tag [value]="getStockStatus(book.stock)" [severity]="getStockSeverity(book.stock)" class="absolute"
                                 [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
                         </div>

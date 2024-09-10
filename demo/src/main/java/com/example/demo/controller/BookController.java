@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +21,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.dto.BookDTO;
+import com.example.demo.dto.CategoryDTO;
+import com.example.demo.dto.SaveBookRequest;
 import com.example.demo.model.Book;
+import com.example.demo.model.Category;
 import com.example.demo.services.BookServiceImpl;
 
 import jakarta.validation.Valid;
@@ -29,7 +36,6 @@ public class BookController {
 
 	@Autowired
     private BookServiceImpl bookServiceImpl;
-    
 
     @PostMapping
     public ResponseEntity<Book> saveBook(@RequestPart("book") Book book, @RequestPart("file") MultipartFile file) {
@@ -39,6 +45,16 @@ public class BookController {
             return new ResponseEntity<>(savedBook, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/save")
+    public ResponseEntity<Book> addBook(@RequestBody SaveBookRequest bookDTO){
+        try {
+            Book book = bookServiceImpl.addBook(bookDTO);
+            return new ResponseEntity<>(book, HttpStatus.OK);
+        } catch (Exception e) {
+            // TODO: handle exception
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -68,8 +84,10 @@ public class BookController {
 
 
     @GetMapping
-    public ResponseEntity<List<Book>> getAllBooks(){
-        return new ResponseEntity<>(bookServiceImpl.getBooks(),HttpStatus.OK);
+    public ResponseEntity<List<BookDTO>> getAllBooks(){
+        List<Book> books = bookServiceImpl.getBooks();
+        List<BookDTO> listBooks = bookServiceImpl.convertToBookDtoList(books);
+        return new ResponseEntity<>(listBooks,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -88,5 +106,25 @@ public class BookController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<CategoryDTO>> getCategories(){
+        List<Category> categories = bookServiceImpl.getCategories();
+        List<CategoryDTO> listCategories = bookServiceImpl.convertToCategoryDtoList(categories);
+        return new ResponseEntity<>(listCategories, HttpStatus.OK);
+    }
+
+    @GetMapping("/categoria/{categoria}/orden/{orden}/{pagina}")
+    public ResponseEntity<List<Book>> getBooksByCategory(@PathVariable("categoria") String category, @PathVariable("orden")String orden, @PathVariable("pagina")int pagina) throws Exception{
+        try {
+            Pageable pageable = PageRequest.of(pagina, 10, Sort.by(orden.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "title"));
+            return new ResponseEntity<>(bookServiceImpl.getBooksByCategory(category, pageable).getContent(), HttpStatus.OK);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.getMessage();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        
     }
 }

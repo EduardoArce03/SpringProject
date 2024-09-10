@@ -38,6 +38,7 @@ export class EmailVerificationComponent {
         this.forgotPassword = data;
         console.log(this.forgotPassword.user.name);
         this.router.navigate(['/change-password']);
+        localStorage.setItem('email', this.email);
       },
       error: (error) => {
         console.log('Error', error);

@@ -1,4 +1,4 @@
 export interface ChangePassword {
     password: string;
-    repeatPassword: string;
+    confirmPassword: string;
 }

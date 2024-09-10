@@ -11,12 +11,15 @@ import { CardModule } from 'primeng/card';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FileSelectEvent } from 'primeng/fileupload';
 import { FileUploadModule } from 'primeng/fileupload';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { Category } from '../models/Category';
 
 
 @Component({
   selector: 'app-form-book',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, ButtonModule, ToastModule, RouterModule, InputNumberModule, CardModule, InputTextModule, FloatLabelModule, FileUploadModule],
+  imports: [ReactiveFormsModule, FormsModule, ButtonModule, ToastModule, RouterModule,
+    InputNumberModule, CardModule, InputTextModule, FloatLabelModule, FileUploadModule, MultiSelectModule],
   templateUrl: './form-book.component.html',
   styleUrl: './form-book.component.scss'
 })
@@ -26,8 +29,11 @@ export class FormBookComponent {
   isSaveInProgress: boolean = false;
   edit: boolean = false;
   selectedFile: File | null = null;
+  categories: any[] = [];
+  selectedCategories: any[] = [];
 
-  constructor(private fb: FormBuilder, private bookService: BookServicesService, private activatedRoute: ActivatedRoute, private messageService: MessageService, private router: Router) {
+  constructor(private fb: FormBuilder, private bookService: BookServicesService, private activatedRoute: ActivatedRoute,
+    private messageService: MessageService, private router: Router) {
     this.form = this.fb.group({
       id: [null],
       title: ['', Validators.required],
@@ -35,13 +41,15 @@ export class FormBookComponent {
       pages: [1, [Validators.required, Validators.min(1)]],
       price: [0, [Validators.required, Validators.min(0)]],
       stock: [0, [Validators.required, Validators.min(1)]],
-      image: [null]
+      image: [],
+      selectedCategories: [[], Validators.required]
     });
   }
 
   ngOnInit(): void {
+    this.getCategories();
+    //-------//
     let id = this.activatedRoute.snapshot.paramMap.get('id');
-    console.log('IDDDDDDDDDDD2', id);
     if (id != 'new' && id !== null) {
       this.edit = true
       this.getBookById(Number(id));
@@ -51,7 +59,7 @@ export class FormBookComponent {
   onFileSelected(event: FileSelectEvent) {
     this.selectedFile = event.files[0];
   }
-  
+
   changeImage(event: FileSelectEvent) {
     this.selectedFile = event.files[0];
     if (!this.selectedFile) {
@@ -95,8 +103,17 @@ export class FormBookComponent {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Seleccione una imagen' });
       return;
     }
+    // Extrae los valores del formulario
+    const formValues = this.form.value;
+    const selectedCategoryIds = formValues.selectedCategories;
 
-    this.bookService.createBook(this.form.value, this.selectedFile).subscribe({
+    // Construye el objeto para enviar al backend
+    const bookData = {
+      ...formValues,
+      categoryIds: selectedCategoryIds
+    };
+
+    this.bookService.createBook(bookData, this.selectedFile).subscribe({
       next: () => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Libro creado con éxito' });
         this.router.navigateByUrl('/');
@@ -139,5 +156,20 @@ export class FormBookComponent {
       },
     });
   }
+
+  getCategories() {
+    this.bookService.getCategories().subscribe({
+      next: (categories: Category[]) => {
+
+        //this.categories = categories;
+        this.categories = categories
+      },
+      error: () => {
+        console.log('Error al obtener las categorías');
+      }
+    });
+  }
+
+
 
 }

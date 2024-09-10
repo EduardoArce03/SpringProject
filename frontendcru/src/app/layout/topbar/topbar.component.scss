@@ -1,0 +1,22 @@
+.category-wrapper {
+    position: relative;
+}
+
+.category-link {
+    display: block;
+    padding: 1rem;
+    text-align: center;
+    transition: background-color 0.3s;
+    color: inherit; /* Hereda el color del contenedor padre */
+    text-decoration: none; /* Elimina el subrayado */
+}
+
+.category-wrapper:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background-color: #000; /* Línea vertical */
+}
